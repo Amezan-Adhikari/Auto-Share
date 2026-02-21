@@ -16,10 +16,9 @@ function isTokenExpired(token: string): boolean {
   }
 }
 
-export async function getValidStoredToken(_id:string,userID:string){
+export async function getValidStoredToken({_id,userID}:{_id:string,userID:string}){
   const data = await MeroShareAccountModel.findOne({_id,userID});
   if(!data) return;
-
   const token = data?.authorization;
   if(isTokenExpired(decrypt(token)) || !token){
     const {token:newToken} = await getValidToken({
@@ -32,7 +31,7 @@ export async function getValidStoredToken(_id:string,userID:string){
     })
     return newToken;
   }else{
-    return decrypt(token);
+    return  decrypt(token);
   }
 }
 

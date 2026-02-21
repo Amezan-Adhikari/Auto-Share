@@ -1,22 +1,5 @@
 import Database from "@/server/db/db-config";
-import mongoose, { Schema, Document, Types } from "mongoose";
-import { string } from "zod";
-
-export interface MeroShareAccountType extends Document {
-  userID: Types.ObjectId;
-  clientId: number;
-  username: string;
-  password: {
-    content: string;
-    iv: string;
-    tag: string;
-  };
-  authorization: {
-    content: string;
-    iv: string;
-    tag: string;
-  };
-}
+import mongoose, { Schema, Document } from "mongoose";
 
 export interface MeroShareBankType extends Document {
   code: string;
@@ -24,44 +7,21 @@ export interface MeroShareBankType extends Document {
   name: string;
 }
 
-export interface MeroShareAccountResponse {
-  userID: string;
-  clientId: number;
-  username: string;
-  password: {
-    content: string;
-    iv: string;
-    tag: string;
-  };
-  authorization: {
-    content: string;
-    iv: string;
-    tag: string;
-  };
+export interface MeroShareBankResponse {
+  code: string;
+  id: number;
+  name: string;
 }
 
-const encryptedField = {
-  content: { type: String },
-  iv: { type: String },
-  tag: { type: String },
-};
+const bankSchema = new Schema<MeroShareBankType>({
+  code: { type: String },
+  id: { type: Number },
+  name: { type: String },
+});
 
-const meroSchema = new Schema<MeroShareAccountType>(
-  {
-    userID: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    clientId: { type: Number, required: true },
-    username: { type: String, required: true },
-    password: { type: encryptedField, required: true },
-    authorization: { type: encryptedField, required: true },
-  },
-  { timestamps: true },
-);
-
-meroSchema.index({ username: 1, userID: 1 }, { unique: true });
-
-const MeroShareAccountModel: mongoose.Model<MeroShareAccountType> =
-  mongoose.models.MeroShareAccount ||
+const MeroShareBankModel: mongoose.Model<MeroShareBankType> =
+  mongoose.models.MeroShareBank ||
   (await Database.connect(),
-  mongoose.model<MeroShareAccountType>("MeroShareAccount", meroSchema));
+  mongoose.model<MeroShareBankType>("MeroShareBank", bankSchema));
 
-export default MeroShareAccountModel;
+export default MeroShareBankModel;

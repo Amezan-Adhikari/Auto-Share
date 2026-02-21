@@ -2,8 +2,7 @@ import { getValidStoredToken } from "../Token";
 
 export async function getBank(_id: string, userID: string) {
 
-  const token = await getValidStoredToken(_id, userID);
-
+  const token = await getValidStoredToken({_id, userID});
   if (!token) return;
   const res = await fetch(
     "https://webbackend.cdsc.com.np/api/meroShare/bank/",
@@ -20,6 +19,5 @@ export async function getBank(_id: string, userID: string) {
     },
   );
   const data = await res.json();
-  console.log(data);
   return data;
 }

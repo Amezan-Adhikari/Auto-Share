@@ -12,6 +12,10 @@ const useGetBank = (_id: string) => {
     queryKey: ["meroshare-bank", _id],
     queryFn: () => getBank(_id),
     enabled: !!_id,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    staleTime: 1000 * 60 * 5,
   });
 };
 
