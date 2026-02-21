@@ -34,7 +34,11 @@ async function createMeroShareAccount({ username, password, clientId }: createPa
 const useGetMeroShareAccounts = ()=>{
     return useQuery({
         queryKey:["mero-share-users"],
-        queryFn:getMeroShareAccounts
+        queryFn:getMeroShareAccounts,
+        refetchOnWindowFocus:false,
+        refetchOnMount:false,
+        refetchOnReconnect:false,
+        staleTime:1000*60*5,
     })
 }
 
